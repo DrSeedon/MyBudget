@@ -2,24 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
-using static DataController;
 
 public class MainController : MonoBehaviour
 {
     void Start()
     {
+        StartParse();
+    }
+
+    public void StartParse()
+    {
         GetData();
-        UIController.Instance.ShowDatas();
+        UIController.Instance.ShowDatas(DataController.Instance.budgetData);
     }
 
     private void GetData()
     {
-        if (ExistData())
-            LoadGame();
+        if (DataController.Instance.ExistData())
+            DataController.Instance.LoadGame();
         else
         {
             ExcelParser.Parse();
-            SaveGame();
+            DataController.Instance.SaveGame();
         }
     }
 

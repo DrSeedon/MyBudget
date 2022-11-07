@@ -5,14 +5,14 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
-public class DataController
+public class DataController : StaticInstance<DataController>
 {
     public class BudgetData
     {
         public List<ProcedureData> ProcedureDatas = new List<ProcedureData>();
     }
 
-    public static BudgetData budgetData = new BudgetData();
+    public BudgetData budgetData = new BudgetData();
 
     public class ProcedureData
     {
@@ -28,26 +28,26 @@ public class DataController
     [Serializable]
     public class SaveData
     {
-        public BudgetData BudgetData;
+        public BudgetData BudgetData = new BudgetData();
     }
 
-    private static SaveData _saveData = new SaveData();
+    private SaveData _saveData = new SaveData();
 
     private const string NameFile = "save.json";
 
-    public static void SaveGame()
+    public void SaveGame()
     {
         ResetData();
         _saveData.BudgetData = budgetData;
         FileIOUtility.WriteToJson(NameFile, _saveData);
     }
 
-    public static void LoadGame()
+    public void LoadGame()
     {
         var gameData = (SaveData) FileIOUtility.ReadFromJson<SaveData>(NameFile);
 
         if (gameData != null)
-            budgetData = _saveData.BudgetData;
+            budgetData = gameData.BudgetData;
     }
 
     static void ResetData()
@@ -56,7 +56,7 @@ public class DataController
             File.Delete(Application.streamingAssetsPath + $"/{NameFile}");
     }
 
-    public static bool ExistData()
+    public bool ExistData()
     {
         return File.Exists(Application.streamingAssetsPath + $"/{NameFile}");
     }

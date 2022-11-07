@@ -30,7 +30,7 @@ public static class ExcelParser
                             Amount = reader.GetDouble(5),
                             AccountBalance = reader.GetDouble(8)
                         };
-                        DataController.budgetData.ProcedureDatas.Add(procedureData);
+                        DataController.Instance.budgetData.ProcedureDatas.Add(procedureData);
                         row++;
                     }
                 } while (reader.NextResult());
